@@ -1,0 +1,21 @@
+ + basic structure
+ - basic config and app code
+ - basic models
+    - Users
+    - Books 
+        (M2M)
+    - Authors
+    (No user permissions and user 2 books relations for simplicity every authorized user can edit delete data)
+ - basic views and templates
+    - index (add pagination here)
+ - login/logout support for users flask-login (through openID (I think restricted to Google account))
+ - delete
+ - WTF forms for editing data
+ - Search
+ - make pretty and more UF
+    - some styling 
+    - upgrade crud in UI to AJAX
+ - initialization/managment script (makefile will do nice)
+ ...
+
+order is not presize
