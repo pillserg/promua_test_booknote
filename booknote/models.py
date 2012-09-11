@@ -2,6 +2,9 @@ from flask.ext.login import UserMixin
 from booknote import app, db
 
 
+__all__ = ['User', 'Book', 'Author', ]
+
+
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -40,8 +43,8 @@ class Author(db.Model):
     # still not shure about joins stuff here will review later 
     books = db.relationship('Book',
                             secondary=book2author,
-                            primaryjoin=(book2author.c.book_id == id),
-                            secondaryjoin=(book2author.c.author_id == id),
+#                            primaryjoin=(book2author.c.book_id == id),
+#                            secondaryjoin=(book2author.c.author_id == id),
                             backref=db.backref('authors', lazy='dynamic'),
                             lazy='dynamic')
 

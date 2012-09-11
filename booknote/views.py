@@ -5,7 +5,7 @@ from flask.ext.login import login_required
 
 from booknote import app, db, lm, oid
 from booknote.models import User, Book, Author
-from booknote.forms import LoginForm, BookForm
+from booknote.forms import LoginForm, BookForm, AuthorForm
 
 
 @lm.user_loader
@@ -60,22 +60,21 @@ def after_login(resp):
     return redirect(request.args.get('next') or url_for('index'))
 
 
-@app.route('/books_list/')
-def book_list():
+@app.route('/books')
+def books_list():
     books = Book.query.all()
     return render_template('index.html', books=books)
 
 
-@app.route('/authors_list/')
+@app.route('/authors')
 def authors_list():
-    return 'authors_list'
+    authors = Author.query.all()
+    return render_template('authors_list.html', authors=authors)
 
 
 @app.route('/')
 def index():
-    context = {}
-    #temp
-    return render_template('index.html', **context)
+    return books_list()
 
 
 @app.route('/add_book/', methods=['GET', 'POST', ])
@@ -93,22 +92,36 @@ def add_book():
                            form=form, data=data, success=success)
 
 
-@app.route('/delete_book/')
+@app.route('/delete_book/<int:id>', methods=['POST', ])
 @login_required
-def delete_book():
+def delete_book(id):
+    try:
+        book = Book.query.get(id)
+    except Exception:
+        pass
+
     return 'temp delete'
 
 
-@app.route('/edit_book/')
+@app.route('/edit_book/<int:id>', methods=['GET', 'POST', ])
 @login_required
-def edit_book():
+def edit_book(id):
     return 'temp edit '
 
 
-@app.route('/add_author/')
+@app.route('/add_author/', methods=['GET', 'POST', ])
 @login_required
 def add_author():
-    return 'temp add'
+    form = AuthorForm()
+    success = False
+    data = ''
+    if form.validate_on_submit():
+        success = True
+        data = repr(form.name.data)
+        db.session.add(form.save())
+        db.session.commit()
+    return render_template('add_author.html',
+                           form=form, data=data, success=success)
 
 
 @app.route('/delete_author/')

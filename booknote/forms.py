@@ -15,3 +15,11 @@ class BookForm(Form):
     def save(self):
         book = Book(title=self.title.data)
         return book
+
+
+class AuthorForm(Form):
+    name = TextField('name', validators=[Required(), Length(min=5, max=256)])
+
+    def save(self):
+        author = Author(name=self.name.data)
+        return author

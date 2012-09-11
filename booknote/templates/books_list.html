@@ -1,7 +1,17 @@
-<ul>
+<ul class="entries">
+    {% if g.user.is_authenticated() %}
+        <li class="entry"><a href="{{ url_for('add_book') }}" class="">Add book</a></li>
+    {% endif %}    
     {% for book in books %}
-        <li>
-            <h1>{{ book.title }}</h1>
+        <li class="entry">
+            {% if g.user.is_authenticated() %}
+                <div class="control">
+                    <a href="{{ url_for('edit_book', id=book.id) }}">edit</a>
+                    <a href="{{ url_for('delete_book', id=book.id) }}">delete</a>
+                </div>
+            {% endif %}
+            <h2>{{ book.title }}</h2>
+            
             authors: pass
         </li>
     {% endfor %}

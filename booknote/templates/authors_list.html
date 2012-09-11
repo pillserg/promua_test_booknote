@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<ul class="entries">
+    {% if g.user.is_authenticated() %}
+        <li class="entry"><a href="{{ url_for('add_author') }}">Add author</a></li>
+    {% endif %}    
+    {% for author in authors %}
+        <li class="entry">
+            {% if g.user.is_authenticated() %}
+                <div class="control">
+                    <a href="{{ url_for('edit_author', id=author.id) }}">edit</a>
+                    <a href="{{ url_for('delete_author', id=author.id) }}">delete</a>
+                </div>
+            {% endif %}
+            <h2>{{ author.name }}</h2>
+            
+            (0) books of this author in database
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
