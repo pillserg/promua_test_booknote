@@ -1,17 +1,21 @@
  + basic structure
  + basic config and app code
  + basic models
-    - Users
-    - Books 
+    + Users
+    + Books 
         (M2M)
-    - Authors
+    + Authors
     (No user permissions and user 2 books relations for simplicity every authorized user can edit delete data)
- - basic views and templates
-    - index (add pagination here)
- - login/logout support for users flask-login (through openID (I think restricted to Google account))
+ + basic views and templates
+    + index (add pagination here - it'll be implemented somewhere down the road)
+    + books list
+    + authors list
+ + login/logout support for users flask-login (through openID (I think restricted to Google account))
+ + simple data add (WTF)
  - delete
  - WTF forms for editing data
  - Search
+ - m2m addition from books add edit through http://loopj.com/jquery-tokeninput/ should be ok.
  - make pretty and more UF
     - some styling 
     - upgrade crud in UI to AJAX
