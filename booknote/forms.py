@@ -13,32 +13,30 @@ class BookForm(Form):
     authors = TextField('authors')
 
     def __init__(self, *args, **kwargs):
-        self.instance = None
         self.need_m2m_save = False
-
-        if 'obj' in kwargs:
-            obj = kwargs.pop('obj')
-            self.instance = obj
+        self.obj = None
         super(BookForm, self).__init__(*args, **kwargs)
+        if not self.obj:
+            self.need_m2m_save = True
 
     def _get_authors_ids(self):
         return self.authors.data.split(',')
 
     def save(self):
-        if not self.instance:
-            self.instance = Book(title=unicode(self.title.data))
+        if not self.obj:
+            self.obj = Book(title=unicode(self.title.data))
             self.need_m2m_save = True
         else:
-            self.instance.title = self.title.data
-        return self.instance
+            self.obj.title = self.title.data
+        return self.obj
 
     def save_m2m(self):
         if self.authors.data:
             ids = self._get_authors_ids()
             authors = Author.query.filter(Author.id.in_(ids)).all()
             for author in authors:
-                self.instance.authors.append(author)
-        return self.instance
+                self.obj.authors.append(author)
+        return self.obj
 
 
 class AuthorForm(Form):

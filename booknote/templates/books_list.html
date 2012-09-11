@@ -23,7 +23,7 @@
             {% endif %}
             <h2>{{ book.title }}</h2>
             
-            authors: {{ book.authors_names|join(', ') }} 
+            by {{ book.authors_names|join(', ') }} 
         </li>
     {% endfor %}
 </ul>

@@ -115,12 +115,12 @@ def edit_book(id):
     book = Book.query.get(id)
     form = BookForm(obj=book)
     if form.validate_on_submit():
-        if book:
-            form.populate_obj(book)
-        else:
-            book = form.save()
-        db.session.add(book)
-        db.session.commit()
+#        if book:
+#            form.populate_obj(book)
+#        else:
+#            book = form.save()
+#        db.session.add(book)
+#        db.session.commit()
         flash('Successfully updated bood info')
         return redirect(url_for('books_list'))
     return render_template('add_book.html', form=form)
