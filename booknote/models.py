@@ -10,6 +10,9 @@ class User(db.Model):
     def __repr__(self):
         return u'<User: {}'.format(self.username)
 
+    def is_authenticated(self):
+        return True
+
 
 book2author = db.Table('book2author',
     db.Column('book_id', db.Integer, db.ForeignKey('books.id')),

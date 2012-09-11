@@ -1,6 +1,6 @@
  + basic structure
- - basic config and app code
- - basic models
+ + basic config and app code
+ + basic models
     - Users
     - Books 
         (M2M)
