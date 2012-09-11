@@ -60,9 +60,54 @@ def after_login(resp):
     return redirect(request.args.get('next') or url_for('index'))
 
 
+@app.route('/books_list/')
+def book_list():
+    return 'books_list'
+
+
+@app.route('/authors_list/')
+def authors_list():
+    return 'authors_list'
+
+
 @app.route('/')
 def index():
-    #mock user
     context = {}
-
+    #temp
     return render_template('index.html', **context)
+
+
+@app.route('/add_book/')
+@login_required
+def add_book():
+    return 'temp add'
+
+
+@app.route('/delete_book/')
+@login_required
+def delete_book():
+    return 'temp delete'
+
+
+@app.route('/edit_book/')
+@login_required
+def edit_book():
+    return 'temp edit '
+
+
+@app.route('/add_author/')
+@login_required
+def add_author():
+    return 'temp add'
+
+
+@app.route('/delete_author/')
+@login_required
+def delete_author():
+    return 'temp delete'
+
+
+@app.route('/edit_author/')
+@login_required
+def edit_author():
+    return 'temp edit '

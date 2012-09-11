@@ -32,6 +32,7 @@ class Book(db.Model):
     def __repr__(self):
         return u'<Book: {}'.format(self.title)
 
+
 class Author(db.Model):
     __tablename__ = 'authors'
     id = db.Column(db.Integer, primary_key=True)
