@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
 {% block extra_css %}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='js/lib/jquery-tokeninput/styles/token-input.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/token-input.css') }}" />
 {% endblock %}
 
 {% block extra_js %}
     <script src="{{ url_for('static', filename='js/lists_management.js') }}"></script>
     <script src="{{ url_for('static', filename='js/lib/jquery-tokeninput/src/jquery.tokeninput.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/tokeninput.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/authors_autocomplite.js') }}"></script>
 {% endblock %}
 
 {% block content %}
@@ -18,7 +18,7 @@
         <tr>
             <td>Title:</td>
             <td>
-                {{ form.title(size = 48) }}
+                {{ form.title(size = 48, class="styled-input") }}
                 {% for error in form.errors.title %}
                     <br><span style="color: red;">[{{ error }}]</span>
                 {% endfor %}

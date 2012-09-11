@@ -7,7 +7,7 @@
         <tr>
             <td>Name:</td>
             <td>
-                {{ form.name(size = 48) }}
+                {{ form.name(size=48, class="styled-input") }}
                 {% for error in form.errors.name %}
                     <br><span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
