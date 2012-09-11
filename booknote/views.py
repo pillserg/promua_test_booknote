@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import simplejson
 
 from flask import render_template, flash, redirect, url_for, jsonify
@@ -8,6 +9,7 @@ from flask.ext.login import login_required
 from booknote import app, db, lm, oid
 from booknote.models import User, Book, Author
 from booknote.forms import LoginForm, BookForm, AuthorForm
+from booknote.helpers import to_json
 
 
 @lm.user_loader
@@ -148,3 +150,17 @@ def delete_author(id):
 @login_required
 def edit_author(id):
     return 'temp edit '
+
+
+@app.route('/authors_autocomplite')
+def authors_autocomplite():
+    # add if request.is_xhr here
+    q = request.args.get('q')
+    authors = [
+        {"id": "856", "name": u"Киплинг"},
+        {"id": "1035", "name": u"Тургеньев"},
+        {"id": "1036", "name": u"Желязны Роджер"},
+        ]
+    return to_json(authors)
+
+
