@@ -156,11 +156,12 @@ def edit_author(id):
 def authors_autocomplite():
     # add if request.is_xhr here
     q = request.args.get('q')
-    authors = [
-        {"id": "856", "name": u"Киплинг"},
-        {"id": "1035", "name": u"Тургеньев"},
-        {"id": "1036", "name": u"Желязны Роджер"},
-        ]
-    return to_json(authors)
+
+    if not q or len(q) < app.config['MIN_AUTOCOMPLITE_LENGTH']:
+        return jsonify(success=False, error='parameter is to short')
+
+    authors = Author.case_insensetive_get_authors_where_name_contains(q)
+    authors_lst = [{ 'id': a.id, 'name': a.name } for a in authors]
+    return to_json(authors_lst)
 
 

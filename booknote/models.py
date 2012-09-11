@@ -47,6 +47,24 @@ class Author(db.Model):
 #                            secondaryjoin=(book2author.c.author_id == id),
                             backref=db.backref('authors', lazy='dynamic'),
                             lazy='dynamic')
+    @staticmethod
+    def get_authors_where_name_contains(q):
+        authors = Author.query.filter(Author.name.like(u'%{}%'.format(q)))
+        return authors
+
+    @staticmethod
+    def case_insensetive_get_authors_where_name_contains(q):
+        """
+        Trys to cappitalize name 
+        It's really dull but i couldnt overcome 
+        unicode-casesensetive-insensetive-sqlite issues in apropriate time
+        this method seems to do it's work 
+        """
+        authors = Author.get_authors_where_name_contains(q)
+        if not authors.count():
+            authors = Author.get_authors_where_name_contains(unicode(q).capitalize())
+        return authors
+
 
     def __repr__(self):
         return u'<Author: {}>'.format(self.name)

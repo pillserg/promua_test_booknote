@@ -13,13 +13,14 @@ class BookForm(Form):
     authors = TextField('authors')
 
     def __init__(self, *args, **kwargs):
-        super(BookForm, self).__init__(*args, **kwargs)
+        self.instance = None
         if 'obj' in kwargs:
             obj = kwargs.pop('obj')
             self.instance = obj
         super(BookForm, self).__init__(*args, **kwargs)
 
     def save(self):
+        assert False
         if not self.instance:
             book = Book(title=self.title.data)
         else:

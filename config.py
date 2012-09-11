@@ -19,3 +19,5 @@ OPENID_PROVIDERS = [{
                      'url': 'https://www.google.com/accounts/o8/id',
                      'img': 'images/google_openid.jpeg'
                      }, ]
+
+MIN_AUTOCOMPLITE_LENGTH = 3
