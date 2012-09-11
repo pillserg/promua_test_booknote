@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/login.js') }}"></script>
+{% endblock %}
+{% block content %}
+    <form action="" method="post" name="login" id="login_form">
+        {{ form.hidden_tag() }}
+        <p>
+            Please enter your OpenID:<br>
+            {{ form.openid(size=57) }}<br>
+            {% for error in form.errors.openid %}
+                <span style="color: red;">{{ error }}</span>
+            {% endfor %}<br>
+            {% for pr in providers %}
+                <a href="javascript:set_openid('{{pr.url}}', '{{pr.name}}', true);"><img src="{{ url_for('static', filename=pr.img) }}" height="25px" alt="{{ pr.name }}"></a>
+            {% endfor %}
+        </p>
+        <p>{{ form.remember_me }} Remember Me</p>
+        <p><input type="submit" value="Sign In"></p>
+    </form>
+{% endblock %}

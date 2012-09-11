@@ -1,17 +1,22 @@
+from flask.ext.login import UserMixin
 from booknote import app, db
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
 
+    @staticmethod
+    def make_unique_username(username, version=2):
+        if not User.query.filter_by(username=username).first():
+            return username
+        new_username = username + str(version)
+        return User.make_unique_username(new_username, version + 1)
+
     def __repr__(self):
         return u'<User: {}'.format(self.username)
-
-    def is_authenticated(self):
-        return True
 
 
 book2author = db.Table('book2author',

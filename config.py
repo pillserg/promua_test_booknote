@@ -14,3 +14,8 @@ SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
 CSRF_ENABLED = True
 SECRET_KEY = '\xe1B\xca\xdb\x91N\x13\xb9\xccd\x7fdU\xbb\x17|'
 
+OPENID_PROVIDERS = [{
+                     'name': 'Google',
+                     'url': 'https://www.google.com/accounts/o8/id',
+                     'img': 'images/google_openid.jpeg'
+                     }, ]

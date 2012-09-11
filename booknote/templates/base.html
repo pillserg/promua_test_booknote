@@ -1,18 +1,25 @@
 <!DOCTYPE html>
-<title>Booknote</title>
-<link rel=stylesheet type="text/css" href="{{ url_for('static', filename='style.css') }}" />
-<div class="page">
-    <h1>Pill's Booknote</h1>
-    <div class="metanav">
-        {% if not g.user.is_authenticated() %}
-            <a href="">login</a>
-        {% else %}
-            logged in as {{ g.user.username }} <a href="">logout</a>
-        {% endif %}
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
+    {% block extra_css %}{% endblock %}    
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+    {% block extra_js %}{% endblock %}
+    <title>Booknote</title>
+</head>
+<body>
+    <div class="page">
+        <h1>Pill's Booknote</h1>
+        <div class="metanav">
+            {% if not g.user.is_authenticated() %}
+                <a href="{{ url_for('login') }}">login</a>
+            {% else %}
+                logged in as {{ g.user.username }} <a href="{{ url_for('logout') }}">logout</a>
+            {% endif %}
+        </div>
+        {% for message in get_flashed_messages() %}
+            <div class="flash">{{ message }}</div>
+        {% endfor %}
+        {% block content %}
+        {% endblock %}
     </div>
-    {% for message in get_flashed_messages() %}
-        <div class="flash">{{ message }}</div>
-    {% endfor %}
-    {% block body %}
-    {% endblock %}
-</div>
+</body>
