@@ -30,26 +30,12 @@ class BookForm(Form):
             self.need_m2m_save = True
         else:
             self.instance.title = self.title.data
-
-        print '------------'
-        print 'instance: ', self.instance.title
-        print '------------'
         return self.instance
 
     def save_m2m(self):
-        print '------------'
-        print 'save m2m called'
-        print '------------'
         if self.authors.data:
-            print '------------'
-            print 'self.authors.data: ', self.authors.data
-            print '------------'
             ids = self._get_authors_ids()
             authors = Author.query.filter(Author.id.in_(ids)).all()
-            print '------------'
-            print 'ids: ', ids
-            print 'authors: ', authors
-            print '------------'
             for author in authors:
                 self.instance.authors.append(author)
         return self.instance
