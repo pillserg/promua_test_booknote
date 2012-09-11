@@ -1,6 +1,11 @@
 {% extends "base.html" %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='js/lib/jquery-tokeninput/styles/token-input.css') }}" />
+{% endblock %}
 {% block extra_js %}
     <script src="{{ url_for('static', filename='js/lists_management.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lib/jquery-tokeninput/src/jquery.tokeninput.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/tokeninput.js') }}"></script>
 {% endblock %}
 
 {% block content %}

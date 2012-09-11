@@ -107,7 +107,18 @@ def delete_book(id):
 @app.route('/books/edit/<int:id>', methods=['GET', 'POST', ])
 @login_required
 def edit_book(id):
-    return 'temp edit '
+    book = Book.query.get(id)
+    form = BookForm(obj=book)
+    if form.validate_on_submit():
+        if book:
+            form.populate_obj(book)
+        else:
+            book = form.save()
+        db.session.add(book)
+        db.session.commit()
+        flash('Successfully updated bood info')
+        return redirect(url_for('books_list'))
+    return render_template('add_book.html', form=form)
 
 
 @app.route('/authors/add/', methods=['GET', 'POST', ])

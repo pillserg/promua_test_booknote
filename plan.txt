@@ -12,7 +12,7 @@
     + authors list
  + login/logout support for users flask-login (through openID (I think restricted to Google account))
  + simple data add (WTF)
- - delete
+ + delete
  - WTF forms for editing data
  - Search
  - m2m addition from books add edit through http://loopj.com/jquery-tokeninput/ should be ok.
