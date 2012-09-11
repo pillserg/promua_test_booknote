@@ -19,7 +19,7 @@ class User(db.Model, UserMixin):
         return User.make_unique_username(new_username, version + 1)
 
     def __repr__(self):
-        return u'<User: {}'.format(self.username)
+        return u'<User: {}>'.format(self.username)
 
 
 book2author = db.Table('book2author',
@@ -33,7 +33,7 @@ class Book(db.Model):
     title = db.Column(db.String(256), index=True)
 
     def __repr__(self):
-        return u'<Book: {}'.format(self.title)
+        return u'<Book: {}>'.format(self.title)
 
 
 class Author(db.Model):
@@ -49,5 +49,5 @@ class Author(db.Model):
                             lazy='dynamic')
 
     def __repr__(self):
-        return u'<Author: {}'.format(self.name)
+        return u'<Author: {}>'.format(self.name)
 

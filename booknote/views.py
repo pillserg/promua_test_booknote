@@ -1,4 +1,6 @@
-from flask import render_template, flash, redirect, url_for
+import simplejson
+
+from flask import render_template, flash, redirect, url_for, jsonify
 from flask import session, request, g
 from flask.ext.login import login_user, logout_user, current_user
 from flask.ext.login import login_required
@@ -62,13 +64,13 @@ def after_login(resp):
 
 @app.route('/books/')
 def books_list():
-    books = Book.query.all()
-    return render_template('index.html', books=books)
+    books = Book.query.order_by('-id').all()
+    return render_template('books_list.html', books=books)
 
 
 @app.route('/authors/')
 def authors_list():
-    authors = Author.query.all()
+    authors = Author.query.order_by('-id').all()
     return render_template('authors_list.html', authors=authors)
 
 
@@ -88,6 +90,8 @@ def add_book():
         data = repr(form.title.data) + repr(form.authors.data)
         db.session.add(form.save())
         db.session.commit()
+        flash('book was successfully added')
+        return redirect(url_for('books_list'))
     return render_template('add_book.html',
                            form=form, data=data, success=success)
 
@@ -95,12 +99,9 @@ def add_book():
 @app.route('/books/delete/<int:id>', methods=['POST', ])
 @login_required
 def delete_book(id):
-    try:
-        book = Book.query.get(id)
-    except Exception:
-        pass
-
-    return 'temp delete'
+    count = Book.query.filter_by(id=id).delete()
+    db.session.commit()
+    return jsonify(dict(success=success))
 
 
 @app.route('/books/edit/<int:id>', methods=['GET', 'POST', ])
@@ -124,13 +125,15 @@ def add_author():
                            form=form, data=data, success=success)
 
 
-@app.route('/authors/delete/<int:id>')
+@app.route('/authors/delete/<int:id>', methods=['POST', ])
 @login_required
 def delete_author(id):
-    return 'temp delete'
+    count = Author.query.filter_by(id=id).delete()
+    db.session.commit()
+    return jsonify(dict(success=bool(count)))
 
 
-@app.route('/authors/edit/<int:id>')
+@app.route('/authors/edit/<int:id>', methods=['GET', 'POST', ])
 @login_required
 def edit_author(id):
     return 'temp edit '
