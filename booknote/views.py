@@ -60,13 +60,13 @@ def after_login(resp):
     return redirect(request.args.get('next') or url_for('index'))
 
 
-@app.route('/books')
+@app.route('/books/')
 def books_list():
     books = Book.query.all()
     return render_template('index.html', books=books)
 
 
-@app.route('/authors')
+@app.route('/authors/')
 def authors_list():
     authors = Author.query.all()
     return render_template('authors_list.html', authors=authors)
@@ -77,7 +77,7 @@ def index():
     return books_list()
 
 
-@app.route('/add_book/', methods=['GET', 'POST', ])
+@app.route('/books/add/', methods=['GET', 'POST', ])
 @login_required
 def add_book():
     form = BookForm()
@@ -92,7 +92,7 @@ def add_book():
                            form=form, data=data, success=success)
 
 
-@app.route('/delete_book/<int:id>', methods=['POST', ])
+@app.route('/books/delete/<int:id>', methods=['POST', ])
 @login_required
 def delete_book(id):
     try:
@@ -103,13 +103,13 @@ def delete_book(id):
     return 'temp delete'
 
 
-@app.route('/edit_book/<int:id>', methods=['GET', 'POST', ])
+@app.route('/books/edit/<int:id>', methods=['GET', 'POST', ])
 @login_required
 def edit_book(id):
     return 'temp edit '
 
 
-@app.route('/add_author/', methods=['GET', 'POST', ])
+@app.route('/authors/add/', methods=['GET', 'POST', ])
 @login_required
 def add_author():
     form = AuthorForm()
@@ -124,13 +124,13 @@ def add_author():
                            form=form, data=data, success=success)
 
 
-@app.route('/delete_author/')
+@app.route('/authors/delete/<int:id>')
 @login_required
-def delete_author():
+def delete_author(id):
     return 'temp delete'
 
 
-@app.route('/edit_author/')
+@app.route('/authors/edit/<int:id>')
 @login_required
-def edit_author():
+def edit_author(id):
     return 'temp edit '
