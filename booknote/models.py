@@ -33,16 +33,20 @@ class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(256), index=True)
 
-    def authors_list(self):
-        return self.authors.order_by('name')
-
     @property
     def authors_names(self):
         # simploe caching here would be usefull.
         # but simple db column based cache would change db schema
         # and external caching seems like overhead
         # thus just left it as is
-        return [a.name for a in self.authors_list()]
+        return [a.name for a in self.authors.order_by('name').all()]
+
+    @property
+    def authors_list(self):
+        return self.authors.all()
+
+    def get_authors_autocomplete_list(self):
+        return [a.autocomplete_dict for a in self.authors.all()]
 
     def __repr__(self):
         return u'<Book: {}>'.format(self.title)
@@ -83,6 +87,10 @@ class Author(db.Model):
     def books_count(self):
         # again - caching would be good.
         return self.books.count()
+
+    @property
+    def autocomplete_dict(self):
+        return {'id': self.id, 'name': self.name}
 
     def __repr__(self):
         return u'<Author: {}>'.format(self.name)

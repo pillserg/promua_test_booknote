@@ -11,8 +11,13 @@
 {% endblock %}
 
 {% block content %}
-<h2>Add new book</h2>
-<form action="" method="post" name="edit">
+{% if 'add' in request.path %}
+    <h2>Add new book</h2>    
+{% else %}
+    <h2>Edit book</h2>
+{% endif %}
+
+<form action="" method="post" name="edit" id="bookform">
     {{form.hidden_tag()}}
     <table>
         <tr>
@@ -34,7 +39,7 @@
             </td>
         </tr>
         <tr>
-            <td></td>
+            <td><span class="hidden json_autocomplite_init_data">{{ form.authors.json_data }}</span></td>
             <td><input type="submit" value="Add Book"></td>
         </tr>
     </table>

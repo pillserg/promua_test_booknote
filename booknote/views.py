@@ -114,13 +114,7 @@ def edit_book(id):
     book = Book.query.get(id)
     form = BookForm(obj=book)
     if form.validate_on_submit():
-#        if book:
-#            form.populate_obj(book)
-#        else:
-#            book = form.save()
-#        db.session.add(book)
-#        db.session.commit()
-        flash('Successfully updated bood info')
+        flash('Successfully updated book info')
         return redirect(url_for('books_list'))
     return render_template('add_book.html', form=form)
 
@@ -163,5 +157,5 @@ def authors_autocomplite():
         return jsonify(success=False, error='parameter is to short')
 
     authors = Author.case_insensetive_get_authors_where_name_contains(q)
-    authors_lst = [{'id': a.id, 'name': a.name} for a in authors]
+    authors_lst = [a.autocomplete_dict for a in authors]
     return to_json(authors_lst)

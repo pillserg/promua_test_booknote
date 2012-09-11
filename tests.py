@@ -3,7 +3,7 @@ import os
 import unittest
 from itertools import cycle
 
-from flask import Flask, url_for, g, request, session, current_app
+from flask import Flask, url_for, g, request, session, current_app, json
 from flask.ext.login import login_user, logout_user, current_user
 from flask.ext.login import LoginManager
 from flask.ext.testing import TestCase
@@ -12,6 +12,8 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from config import basedir
 from booknote import app, db
 from booknote.models import User, Book, Author
+from booknote.forms import BookForm, AuthorForm
+
 
 def setup_interactive(app):
     lm = LoginManager()
@@ -22,12 +24,12 @@ def setup_interactive(app):
         return "UNAUTHORIZED!"
     lm.setup_app(app)
 
+
 class MainTestCase(TestCase):
     def create_app(self):
         app.config.from_object('tests_config')
-
         # I am really sleepy now. Played with it for a while now. 
-        # but could not found normal way to test login related features
+        # But could not found normal way to test login related features
         # thus something like this:
         @app.route("/login")
         def login():
@@ -77,7 +79,6 @@ class MainTestCase(TestCase):
             book.authors.append(author)
         db.session.add(book)
         db.session.commit()
-
 
     def test_make_unique_nickname(self):
         u = User(username='john', email='john@example.com')
@@ -145,6 +146,24 @@ class MainTestCase(TestCase):
             new_author = Author.query.filter_by(name=name).first()
             assert new_author
 
+    def test_forms(self):
+        pass
 
+    def test_autocomplite(self):
+        with self.app.test_request_context():
+            self.create_test_data()
+            resp = self.client.get(url_for('authors_autocomplite'),
+                                   query_string={'q': 'john'})
+            assert len(json.loads(resp.data)) == 2
+
+            # test case insensetive search
+            resp = self.client.get(url_for('authors_autocomplite'),
+                                   query_string={'q': u'Барна'})
+            capital_res = resp.data
+            assert len(json.loads(resp.data)) == 2
+            resp = self.client.get(url_for('authors_autocomplite'),
+                                   query_string={'q': u'барна'})
+            assert len(json.loads(resp.data)) == 2
+            assert capital_res == resp.data
 if __name__ == '__main__':
     unittest.main()

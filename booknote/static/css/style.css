@@ -28,7 +28,7 @@ div.control     {float: right; margin-top: 6px;}
 .right          {float: right;}
 
 
-
+.hidden         {display: none;}
 
 
 input[type="text"].styled-input {
