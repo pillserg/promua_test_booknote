@@ -41,7 +41,7 @@ class Book(db.Model):
         # simploe caching here would be usefull.
         # but simple db column based cache would change db schema
         # and external caching seems like overhead
-        # thus just left it as is 
+        # thus just left it as is
         return [a.name for a in self.authors_list()]
 
     def __repr__(self):
@@ -52,13 +52,14 @@ class Author(db.Model):
     __tablename__ = 'authors'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256), index=True)
-    # still not shure about joins stuff here will review later 
+    # still not shure about joins stuff here will review later
     books = db.relationship('Book',
                             secondary=book2author,
 #                            primaryjoin=(book2author.c.book_id == id),
 #                            secondaryjoin=(book2author.c.author_id == id),
                             backref=db.backref('authors', lazy='dynamic'),
                             lazy='dynamic')
+
     @staticmethod
     def get_authors_where_name_contains(q):
         authors = Author.query.filter(Author.name.like(u'%{}%'.format(q)))
@@ -67,14 +68,15 @@ class Author(db.Model):
     @staticmethod
     def case_insensetive_get_authors_where_name_contains(q):
         """
-        Trys to cappitalize name 
-        It's really dull but i couldnt overcome 
+        Trys to cappitalize name
+        It's really dull but i couldnt overcome
         unicode-casesensetive-insensetive-sqlite issues in apropriate time
-        this method seems to do it's work 
+        this method seems to do it's work
         """
         authors = Author.get_authors_where_name_contains(q)
         if not authors.count():
-            authors = Author.get_authors_where_name_contains(unicode(q).capitalize())
+            authors = Author.get_authors_where_name_contains(
+                                                    unicode(q).capitalize())
         return authors
 
     @property
@@ -84,4 +86,3 @@ class Author(db.Model):
 
     def __repr__(self):
         return u'<Author: {}>'.format(self.name)
-

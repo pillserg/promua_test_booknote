@@ -3,6 +3,7 @@ from flask.ext.wtf import Required, Length
 
 from booknote.models import Book, Author
 
+
 class LoginForm(Form):
     openid = TextField('openid', validators=[Required(), ])
     remember_me = BooleanField('remember_me', default=False)
@@ -41,6 +42,7 @@ class BookForm(Form):
 
 class AuthorForm(Form):
     name = TextField('name', validators=[Required(), Length(min=5, max=256)])
+
     def save(self):
         author = Author(name=unicode(self.name.data))
         return author

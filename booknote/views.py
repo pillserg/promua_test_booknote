@@ -163,7 +163,5 @@ def authors_autocomplite():
         return jsonify(success=False, error='parameter is to short')
 
     authors = Author.case_insensetive_get_authors_where_name_contains(q)
-    authors_lst = [{ 'id': a.id, 'name': a.name } for a in authors]
+    authors_lst = [{'id': a.id, 'name': a.name} for a in authors]
     return to_json(authors_lst)
-
-
