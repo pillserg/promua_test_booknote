@@ -92,6 +92,9 @@ def add_book():
         data = repr(form.title.data) + repr(form.authors.data)
         db.session.add(form.save())
         db.session.commit()
+        if form.need_m2m_save:
+            db.session.add(form.save_m2m())
+            db.session.commit()
         flash('book was successfully added')
         return redirect(url_for('books_list'))
     return render_template('add_book.html',
@@ -103,7 +106,7 @@ def add_book():
 def delete_book(id):
     count = Book.query.filter_by(id=id).delete()
     db.session.commit()
-    return jsonify(dict(success=success))
+    return jsonify(dict(success=bool(count)))
 
 
 @app.route('/books/edit/<int:id>', methods=['GET', 'POST', ])
