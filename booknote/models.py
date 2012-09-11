@@ -32,15 +32,15 @@ class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(256), index=True)
 
-    # simploe caching here would be very usefull.
-    # but simple db column based cache would change db schema
-    # and some external caching seems like overhead
-    # thus just left it as is 
     def authors_list(self):
         return self.authors.order_by('name')
 
     @property
     def authors_names(self):
+        # simploe caching here would be usefull.
+        # but simple db column based cache would change db schema
+        # and external caching seems like overhead
+        # thus just left it as is 
         return [a.name for a in self.authors_list()]
 
     def __repr__(self):
@@ -76,6 +76,10 @@ class Author(db.Model):
             authors = Author.get_authors_where_name_contains(unicode(q).capitalize())
         return authors
 
+    @property
+    def books_count(self):
+        # again - caching would be good.
+        return self.books.count()
 
     def __repr__(self):
         return u'<Author: {}>'.format(self.name)

@@ -17,8 +17,13 @@
                 </div>
             {% endif %}
             <h2>{{ author.name }}</h2>
-            
-            (0) books of this author in database
+            {% with books_count = author.books_count %}
+                {% if books_count %}
+                    {{ books_count }} book(s) of this author currently in database
+                {% else %}
+                    Currently there are no books of this author in database
+                {% endif %}
+            {% endwith %}
         </li>
     {% endfor %}
 </ul>
