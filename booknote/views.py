@@ -58,8 +58,7 @@ def after_login(resp):
         db.session.commit()
     remember_me = False
     if 'remember_me' in session:
-        remember_me = session['remember_me']
-        session.pop('remember_me')
+        remember_me = session.pop('remember_me')
     login_user(user, remember=remember_me)
     return redirect(request.args.get('next') or url_for('index'))
 
