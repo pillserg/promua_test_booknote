@@ -5,7 +5,7 @@ from flask.ext.login import login_required
 
 from booknote import app, db, lm, oid
 from booknote.models import User, Book, Author
-from booknote.forms import LoginForm
+from booknote.forms import LoginForm, BookForm
 
 
 @lm.user_loader
@@ -62,7 +62,8 @@ def after_login(resp):
 
 @app.route('/books_list/')
 def book_list():
-    return 'books_list'
+    books = Book.query.all()
+    return render_template('index.html', books=books)
 
 
 @app.route('/authors_list/')
@@ -77,10 +78,19 @@ def index():
     return render_template('index.html', **context)
 
 
-@app.route('/add_book/')
+@app.route('/add_book/', methods=['GET', 'POST', ])
 @login_required
 def add_book():
-    return 'temp add'
+    form = BookForm()
+    success = False
+    data = ''
+    if form.validate_on_submit():
+        success = True
+        data = repr(form.title.data) + repr(form.authors.data)
+        db.session.add(form.save())
+        db.session.commit()
+    return render_template('add_book.html',
+                           form=form, data=data, success=success)
 
 
 @app.route('/delete_book/')

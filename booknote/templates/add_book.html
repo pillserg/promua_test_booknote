@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Add new book</h2>
+<form action="" method="post" name="edit">
+    {{form.hidden_tag()}}
+    <table>
+        <tr>
+            <td>Title:</td>
+            <td>
+                {{ form.title(size = 48) }}
+                {% for error in form.errors.title %}
+                    <br><span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td>Authors:</td>
+            <td>
+                {{ form.authors(size=48) }}
+                {% for error in form.errors.authors %}
+                    <br><span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="submit" value="Add Book"></td>
+        </tr>
+    </table>
+</form>
+<hr>
+success: {{ success }}
+<hr>
+data: {{ data }}
+{% endblock %}
