@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>Oops:</h2>
+    <p>The page you where looking for "{{ request.path }}" was not found.</p>
+    <p>Check spelling please and try again or return back <a href="{{ url_for('index') }}">Home</a></p>
+{% endblock %}

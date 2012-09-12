@@ -178,6 +178,10 @@ class MainTestCase(TestCase):
             book = Book.query.filter_by(title=booktitle).first()
             assert not book
 
+            resp = self.client.get(url_for('edit_book', id=999),)
+            self.assert404(resp)
+
+
     def test_author(self):
         with self.app.test_request_context():
             self.create_test_data()

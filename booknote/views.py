@@ -80,17 +80,17 @@ def index():
     return books_list()
 
 
-def add_or_edit_book(form, msg):
+def add_or_edit_book(form, msg=None, template_name='process_book.html'):
     if form.validate_on_submit():
         db.session.add(form.save())
         db.session.commit()
         if form.save_m2m():
             db.session.add(form.get_instance())
             db.session.commit()
-        flash(msg)
-        success = True
+        if msg:
+            flash(msg)
         return redirect(url_for('books_list'))
-    return render_template('process_book.html', form=form)
+    return render_template(template_name, form=form)
 
 
 @app.route('/books/add/', methods=['GET', 'POST', ])
@@ -111,27 +111,38 @@ def delete_book(id):
 
 @app.route('/books/edit/<int:id>', methods=['GET', 'POST', ])
 @login_required
-def edit_book(id=None):
-    book = Book.query.get(id) if id else None
+def edit_book(id):
+    book = Book.query.get_or_404(id)
     msg = 'Book information was successfully updated'
     form = BookForm(obj=book)
     return add_or_edit_book(form, msg)
+
+
+def add_or_edit_author(form, msg=None, template_name='process_author.html'):
+    if form.validate_on_submit():
+        db.session.add(form.save())
+        db.session.commit()
+        if msg:
+            flash(msg)
+        return redirect(url_for('authors_list'))
+    return render_template(template_name, form=form)
 
 
 @app.route('/authors/add/', methods=['GET', 'POST', ])
 @login_required
 def add_author():
     form = AuthorForm()
-    success = False
-    data = ''
-    if form.validate_on_submit():
-        success = True
-        data = repr(form.name.data)
-        db.session.add(form.save())
-        db.session.commit()
-        return redirect(url_for('authors_list'))
-    return render_template('add_author.html',
-                           form=form, data=data, success=success)
+    msg = 'Author was successfully added'
+    return add_or_edit_author(form, msg)
+
+
+@app.route('/authors/edit/<int:id>', methods=['GET', 'POST', ])
+@login_required
+def edit_author(id):
+    author = Author.query.get_or_404(id)
+    form = AuthorForm(obj=author)
+    msg = 'Author information was successfully updated'
+    return add_or_edit_author(form, msg)
 
 
 @app.route('/authors/delete/<int:id>', methods=['POST', ])
@@ -140,12 +151,6 @@ def delete_author(id):
     count = Author.query.filter_by(id=id).delete()
     db.session.commit()
     return jsonify(dict(success=bool(count)))
-
-
-@app.route('/authors/edit/<int:id>', methods=['GET', 'POST', ])
-@login_required
-def edit_author(id):
-    return 'temp edit '
 
 
 @app.route('/authors_autocomplite')
@@ -159,3 +164,14 @@ def authors_autocomplite():
     authors = Author.case_insensetive_get_authors_where_name_contains(q)
     authors_lst = [a.autocomplete_dict for a in authors]
     return to_json(authors_lst)
+
+
+# error handlers
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template('500.html'), 500

@@ -35,7 +35,7 @@ class Book(db.Model):
 
     @property
     def authors_names(self):
-        # simploe caching here would be usefull.
+        # simple caching here would be usefull.
         # but simple db column based cache would change db schema
         # and external caching seems like overhead
         # thus just left it as is
@@ -79,11 +79,8 @@ class Author(db.Model):
     __tablename__ = 'authors'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256), index=True)
-    # still not shure about joins stuff here will review later
     books = db.relationship('Book',
                             secondary=book2author,
-#                            primaryjoin=(book2author.c.book_id == id),
-#                            secondaryjoin=(book2author.c.author_id == id),
                             backref=db.backref('authors', lazy='dynamic'),
                             lazy='dynamic')
 
