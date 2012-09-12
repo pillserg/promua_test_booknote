@@ -19,18 +19,21 @@ def setup_interactive(app):
     lm = LoginManager()
     lm.login_view = "login"
     lm.user_loader(get_user)
+
     @lm.unauthorized_handler
     def unauth():
         return "UNAUTHORIZED!"
+
     lm.setup_app(app)
 
 
 class MainTestCase(TestCase):
     def create_app(self):
         app.config.from_object('tests_config')
-        # I am really sleepy now. Played with it for a while now. 
+        # I am really sleepy now. Played with it for a while now.
         # But could not found normal way to test login related features
         # thus something like this:
+
         @app.route("/login")
         def login():
             id = int(request.args["id"])
@@ -99,7 +102,8 @@ class MainTestCase(TestCase):
         self.create_test_data()
         c = self.client
         user = User.query.first()
-        response = c.get("/login", query_string={"id": user.id, 'permanent': True})
+        response = c.get("/login",
+                         query_string={"id": user.id, 'permanent': True})
         assert response.data == u"Logged in"
         resp = c.get('/')
         assert user.username in resp.data.decode('utf-8')
@@ -191,7 +195,6 @@ class MainTestCase(TestCase):
             resp = self.client.get(url_for('edit_book', id=999),)
             self.assert404(resp)
 
-
     def test_author(self):
         with self.app.test_request_context():
             self.create_test_data()
@@ -210,7 +213,6 @@ class MainTestCase(TestCase):
             author = Author.query.filter_by(name=name).first()
             assert author
             assert author.id == new_author.id
-
 
     def test_autocomplite(self):
         with self.app.test_request_context():
@@ -284,7 +286,7 @@ class MainTestCase(TestCase):
             resp = self.client.post(url_for('search'),
                                     data={'search_input': u'голо'})
             assert u'голо' in resp.data.decode('utf-8')
-            print resp.data
+
 
 if __name__ == '__main__':
     unittest.main()

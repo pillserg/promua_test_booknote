@@ -9,7 +9,7 @@
 {% block content %}
     <span class="hidden" id="search_query">{{ search_query }}</span>
     <p class="greet">
-        You searched for "{{ search_query }}"
+        You searched for "{{ search_query|wordwrap(18, True) }}"
         {% for error in form.search_input.errors %}
             <br><span style="color: red;">{{ error }}</span>
         {% endfor %}

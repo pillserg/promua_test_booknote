@@ -23,7 +23,7 @@
     
  + add pagination to lists
  + change index to show lates books and greetings
- - Search
+ + Search
  - initialization/managment script (makefile will do nice)
  - review
  - doc file for github

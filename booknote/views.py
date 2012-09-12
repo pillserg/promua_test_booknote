@@ -165,7 +165,10 @@ def delete_author(id):
 
 @app.route('/authors_autocomplite')
 def authors_autocomplite():
-    # add if request.is_xhr here
+    """
+    autocomplite view used by jquery-tokeninput on book add/edit page
+    """
+    # request.is_xhr ommited for brevity
     q = request.args.get('q')
 
     if not q or len(q) < app.config['MIN_AUTOCOMPLITE_LENGTH']:
@@ -190,6 +193,11 @@ def internal_server_error(e):
 @app.route('/search', methods=['GET', 'POST', ], defaults={'page': 1})
 @app.route('/search/<int:page>')
 def search(page, per_page=app.config.get('PER_PAGE')):
+    """
+    search view
+    actual search query is implemented in forms.SearchForm
+    some external solution like whoosh would be an overhead in this case
+    """
     form = SearchForm(csrf_enabled=False)
     search_query = ''
     books = []

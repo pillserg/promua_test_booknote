@@ -123,8 +123,3 @@ class SearchForm(Form):
                      Book.title.like(qC)),)
 
         return books
-
-
-
-
-
