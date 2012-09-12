@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% from '_macros.html' import render_pagination, render_books %}
+
+{% block content %}
+    <p class="greet">
+        You searched for "{{ search_query }}"
+        {% for error in form.search_input.errors %}
+            <br><span style="color: red;">{{ error }}</span>
+        {% endfor %}
+    </p>
+    <ul class="entries">
+        {{ render_books(pagination.items, render_controls=g.user.is_authenticated()) }}
+    </ul>
+{% endblock %}

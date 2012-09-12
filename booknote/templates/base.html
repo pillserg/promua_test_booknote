@@ -9,7 +9,12 @@
 </head>
 <body>
     <div class="page">
-        <div class="searchbox"><input type="text" class="styled-input" id="search_input" placeholder="Search..." size="20"/><input type="button" value=">"></div>
+        <div class="searchbox">
+            <form action="{{ url_for('search') }}" method="post" name="search" id="searchform">
+                <input type="text" class="styled-input" id="search_input" placeholder="Search..." size="20" name="search_input"/>
+                <input type="submit" value=">">
+            </form>
+        </div>
         <h1>Pill's Booknote</h1>
         
         <div class="metanav">

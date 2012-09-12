@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from flask.ext.login import UserMixin
+
 from booknote import app, db
+from booknote.helpers import capfirst
 
 
 __all__ = ['User', 'Book', 'Author', ]
@@ -116,9 +118,10 @@ class Author(db.Model):
         may be there are simple SQlite config solution, but i couldn't
         find it in apropriate time
         """
+        q = unicode(q)
         authors = Author.query.filter(
-            db.or_(Author.name.like(u'%{}%'.format(unicode(q))),
-                   Author.name.like(u'%{}%'.format(unicode(q).capitalize())))
+            db.or_(Author.name.like(u'%{}%'.format(q)),
+                   Author.name.like(u'%{}%'.format(capfirst(q))))
             )
         return authors
 

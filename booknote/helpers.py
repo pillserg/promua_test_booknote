@@ -22,3 +22,10 @@ def url_for_different_page(page):
 
 
 app.jinja_env.globals['url_for_different_page'] = url_for_different_page
+
+
+def capfirst(s):
+    if len(s) == 1:
+        return s.upper()
+    else:
+        return ''.join((s[0].upper(), s[1:]))

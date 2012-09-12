@@ -1,8 +1,10 @@
+from flask import json
 from flask.ext.wtf import Form, TextField, BooleanField, Field, TextInput
 from flask.ext.wtf import Required, Length
-from flask import json
 
+from booknote import db
 from booknote.models import Book, Author
+from booknote.helpers import capfirst
 
 
 class TagListField(Field):
@@ -92,3 +94,23 @@ class AuthorForm(Form):
             self.populate_obj(self.obj)
             author = self.obj
         return author
+
+
+class SearchForm(Form):
+    MIN_LENGTH = 3
+    message = u"Search query must be at least {} chars long".format(MIN_LENGTH)
+    search_input = TextField('search',
+                validators=[Length(min=MIN_LENGTH, max= -1, message=message)])
+
+    def find_books(self):
+        q = unicode(self.search_input.data)
+        books = Book.query.filter(db.or_(
+                     Book.title.like(u'%{}%'.format(q)),
+                     Book.title.like(u'%{}%'.format(capfirst(q))),)
+                                  )
+        return books
+
+
+
+
+

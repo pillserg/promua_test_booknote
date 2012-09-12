@@ -8,7 +8,7 @@ from flask.ext.login import login_required
 
 from booknote import app, db, lm, oid
 from booknote.models import User, Book, Author
-from booknote.forms import LoginForm, BookForm, AuthorForm
+from booknote.forms import LoginForm, BookForm, AuthorForm, SearchForm
 from booknote.helpers import to_json
 
 
@@ -185,3 +185,19 @@ def page_not_found(e):
 @app.errorhandler(500)
 def internal_server_error(e):
     return render_template('500.html'), 500
+
+
+@app.route('/search', methods=['GET', 'POST', ], defaults={'page': 1})
+@app.route('/search/<int:page>')
+def search(page, per_page=app.config.get('PER_PAGE')):
+    form = SearchForm(csrf_enabled=False)
+    search_query = ''
+    books = []
+    if form.validate_on_submit():
+        search_query = form.search_input.data
+        books = form.find_books()
+        pagination = books.paginate(page, per_page)
+    return render_template('search_results.html',
+                           search_query=search_query,
+                           form=form,
+                           pagination=pagination)
