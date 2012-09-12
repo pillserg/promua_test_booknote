@@ -71,10 +71,12 @@ def books_list(page, per_page=app.config.get('PER_PAGE')):
     return render_template('books_list.html', pagination=pagination)
 
 
-@app.route('/authors/')
-def authors_list():
-    authors = Author.query.order_by('-id').all()
-    return render_template('authors_list.html', authors=authors)
+@app.route('/authors/', defaults={'page': 1})
+@app.route('/authors/page/<int:page>')
+def authors_list(page, per_page=app.config.get('PER_PAGE')):
+    authors = Author.query.order_by('-name')
+    pagination = authors.paginate(page, per_page)
+    return render_template('authors_list.html', pagination=pagination)
 
 
 @app.route('/')

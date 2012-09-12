@@ -21,8 +21,8 @@
     + some styling 
     + upgrade crud in UI to AJAX(Deletion is ajax, additiion and editing does not need it i think)
     
- - add pagination to lists
- - change index to show lates books and greetings
+ + add pagination to lists
+ + change index to show lates books and greetings
  - Search
  - initialization/managment script (makefile will do nice)
  - review

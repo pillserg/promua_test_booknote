@@ -15,7 +15,7 @@
         {% if g.user.is_authenticated() %}
             <li class="entry"><a href="{{ url_for('add_book') }}" class="">Add book</a></li>
         {% endif %}    
-        {{ render_books(books, render_controls=g.user.is_authenticated()) }}
+        {{ render_books(pagination.items, render_controls=g.user.is_authenticated()) }}
     </ul>
     {{ render_pagination(pagination) }}
 {% endblock %}
