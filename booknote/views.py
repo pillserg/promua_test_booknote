@@ -80,24 +80,25 @@ def index():
     return books_list()
 
 
+def add_or_edit_book(form, msg):
+    if form.validate_on_submit():
+        db.session.add(form.save())
+        db.session.commit()
+        if form.save_m2m():
+            db.session.add(form.get_instance())
+            db.session.commit()
+        flash(msg)
+        success = True
+        return redirect(url_for('books_list'))
+    return render_template('process_book.html', form=form)
+
+
 @app.route('/books/add/', methods=['GET', 'POST', ])
 @login_required
 def add_book():
     form = BookForm()
-    success = False
-    data = ''
-    if form.validate_on_submit():
-        success = True
-        data = repr(form.title.data) + repr(form.authors.data)
-        db.session.add(form.save())
-        db.session.commit()
-        if form.need_m2m_save:
-            db.session.add(form.save_m2m())
-            db.session.commit()
-        flash('book was successfully added')
-        return redirect(url_for('books_list'))
-    return render_template('add_book.html',
-                           form=form, data=data, success=success)
+    msg = 'Book was successfully added'
+    return add_or_edit_book(form, msg)
 
 
 @app.route('/books/delete/<int:id>', methods=['POST', ])
@@ -110,13 +111,11 @@ def delete_book(id):
 
 @app.route('/books/edit/<int:id>', methods=['GET', 'POST', ])
 @login_required
-def edit_book(id):
-    book = Book.query.get(id)
+def edit_book(id=None):
+    book = Book.query.get(id) if id else None
+    msg = 'Book information was successfully updated'
     form = BookForm(obj=book)
-    if form.validate_on_submit():
-        flash('Successfully updated book info')
-        return redirect(url_for('books_list'))
-    return render_template('add_book.html', form=form)
+    return add_or_edit_book(form, msg)
 
 
 @app.route('/authors/add/', methods=['GET', 'POST', ])
@@ -130,6 +129,7 @@ def add_author():
         data = repr(form.name.data)
         db.session.add(form.save())
         db.session.commit()
+        return redirect(url_for('authors_list'))
     return render_template('add_author.html',
                            form=form, data=data, success=success)
 

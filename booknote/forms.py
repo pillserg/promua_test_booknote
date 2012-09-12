@@ -5,6 +5,9 @@ from flask import json
 from booknote.models import Book, Author
 
 
+NEW_ID_STR = 'new'
+
+
 class TagListField(Field):
     widget = TextInput()
 
@@ -15,11 +18,12 @@ class TagListField(Field):
             return u''
 
     def process_formdata(self, valuelist):
-        assert False
         if valuelist:
             self.data = [x.strip() for x in valuelist[0].split(',')]
         else:
             self.data = []
+        if NEW_ID_STR in self.data:
+            pass
 
 
 class AuthorsTagListField(TagListField):
@@ -32,8 +36,6 @@ class AuthorsTagListField(TagListField):
             self.json_data = json.dumps([a.autocomplete_dict for a in authors])
 
 
-
-
 class LoginForm(Form):
     openid = TextField('openid', validators=[Required(), ])
     remember_me = BooleanField('remember_me', default=False)
@@ -44,27 +46,24 @@ class BookForm(Form):
     authors = AuthorsTagListField('authors')
 
     def __init__(self, *args, **kwargs):
-        self.need_m2m_save = False
-        self.obj = None
+        self.obj = kwargs.get('obj', None)
         super(BookForm, self).__init__(*args, **kwargs)
-        if not self.obj:
-            self.need_m2m_save = True
+
+    def get_instance(self):
+        return self.obj
 
     def save(self):
         if not self.obj:
             self.obj = Book(title=unicode(self.title.data))
-            self.need_m2m_save = True
         else:
             self.obj.title = self.title.data
         return self.obj
 
     def save_m2m(self):
         if self.authors.data:
-            ids = self.authors.data
-            authors = Author.query.filter(Author.id.in_(ids)).all()
-            for author in authors:
-                self.obj.authors.append(author)
-        return self.obj
+            ids = set(self.authors.data)
+            return self.obj.update_authors(ids)
+        return False
 
 
 class AuthorForm(Form):

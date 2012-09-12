@@ -45,8 +45,31 @@ class Book(db.Model):
     def authors_list(self):
         return self.authors.all()
 
+    @property
+    def authors_ids_list(self):
+        return [a.id for a in self.authors_list]
+
     def get_authors_autocomplete_list(self):
         return [a.autocomplete_dict for a in self.authors.all()]
+
+    def add_authors_by_ids(self, new_ids):
+        ids_to_add = set(new_ids) - set(self.authors_ids_list)
+        if ids_to_add:
+            for author in Author.get_by_id(ids_to_add):
+                self.authors.append(author)
+        return len(ids_to_add)
+
+    def remove_authors_by_ids(self, new_ids):
+        ids_to_remove = set(self.authors_ids_list) - set(new_ids)
+        if ids_to_remove:
+            for author in Author.get_by_id(ids_to_remove):
+                self.authors.remove(author)
+        return len(ids_to_remove)
+
+    def update_authors(self, ids):
+        remove_count = self.remove_authors_by_ids(ids)
+        add_count = self.add_authors_by_ids(ids)
+        return remove_count + add_count
 
     def __repr__(self):
         return u'<Book: {}>'.format(self.title)
@@ -91,6 +114,11 @@ class Author(db.Model):
     @property
     def autocomplete_dict(self):
         return {'id': self.id, 'name': self.name}
+
+    @staticmethod
+    def get_by_id(ids):
+        list(ids)
+        return Author.query.filter(Author.id.in_(ids))
 
     def __repr__(self):
         return u'<Author: {}>'.format(self.name)

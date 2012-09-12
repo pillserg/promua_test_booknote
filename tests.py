@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import unittest
-from itertools import cycle
+from itertools import cycle, chain
 
 from flask import Flask, url_for, g, request, session, current_app, json
 from flask.ext.login import login_user, logout_user, current_user
@@ -118,6 +118,8 @@ class MainTestCase(TestCase):
             self.login(user)
             resp = self.client.get(url_for('add_book'))
             assert 'form' in resp.data
+
+            # test add
             booktitle = 'new_cool_test_book'
             resp = self.client.post(url_for('add_book'),
                                     data=dict(title=booktitle,
@@ -133,6 +135,36 @@ class MainTestCase(TestCase):
             new_book = Book.query.filter_by(title=booktitle).first()
             assert new_book
             assert new_book.authors.count() == 3
+
+            #test edit
+            # change title and add authors
+            booktitle = booktitle + '_upd'
+            authors_ids_str = ','.join((str(a.id) for a in Author.query.all()[:4]))
+            resp = self.client.post(url_for('edit_book', id=new_book.id),
+                                    data=dict(title=booktitle,
+                                              authors=authors_ids_str))
+            book = Book.query.filter_by(title=booktitle).first()
+            assert book
+            assert book.authors.count() == 4
+
+            # remove some authors
+            authors_ids_str = ','.join((str(a.id) for a in Author.query.all()[:2]))
+            resp = self.client.post(url_for('edit_book', id=book.id),
+                                    data=dict(title=booktitle,
+                                              authors=authors_ids_str))
+            book = Book.query.filter_by(title=booktitle).first()
+            assert book
+            assert book.authors.count() == 2
+
+            # add and remove authors
+            authors_ids_str = ','.join((str(a.id) for a in chain(Author.query.all()[:1], Author.query.all()[2:5])))
+            resp = self.client.post(url_for('edit_book', id=book.id),
+                                    data=dict(title=booktitle,
+                                              authors=authors_ids_str))
+            book = Book.query.filter_by(title=booktitle).first()
+            assert book
+            assert book.authors.count() == 4
+
 
     def test_author(self):
         with self.app.test_request_context():

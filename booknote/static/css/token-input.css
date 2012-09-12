@@ -36,7 +36,7 @@ li.token-input-token {
     padding: 3px 5px;
     background-color: #d0efa0;
     color: #000;
-    font-weight: bold;
+/*    font-weight: bold;*/
     cursor: default;
     display: block;
 }
