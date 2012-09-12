@@ -172,6 +172,11 @@ class MainTestCase(TestCase):
             book = Book.query.filter_by(title=booktitle).first()
             assert id not in book.authors_ids_list
 
+            # test delete book
+            resp = self.client.post(url_for('delete_book', id=book.id),)
+            assert resp.json['success']
+            book = Book.query.filter_by(title=booktitle).first()
+            assert not book
 
     def test_author(self):
         with self.app.test_request_context():
@@ -184,9 +189,6 @@ class MainTestCase(TestCase):
             resp = self.client.post(url_for('add_author'), data=dict(name=name))
             new_author = Author.query.filter_by(name=name).first()
             assert new_author
-
-    def test_forms(self):
-        pass
 
     def test_autocomplite(self):
         with self.app.test_request_context():
