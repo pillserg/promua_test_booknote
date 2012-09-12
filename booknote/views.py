@@ -104,9 +104,10 @@ def add_book():
 @app.route('/books/delete/<int:id>', methods=['POST', ])
 @login_required
 def delete_book(id):
-    count = Book.query.filter_by(id=id).delete()
+    book = Book.query.get_or_404(id)
+    db.session.delete(book)
     db.session.commit()
-    return jsonify(dict(success=bool(count)))
+    return jsonify(dict(success=True))
 
 
 @app.route('/books/edit/<int:id>', methods=['GET', 'POST', ])
@@ -148,9 +149,10 @@ def edit_author(id):
 @app.route('/authors/delete/<int:id>', methods=['POST', ])
 @login_required
 def delete_author(id):
-    count = Author.query.filter_by(id=id).delete()
+    author = Author.query.get_or_404(id)
+    db.session.delete(author)
     db.session.commit()
-    return jsonify(dict(success=bool(count)))
+    return jsonify(dict(success=True))
 
 
 @app.route('/authors_autocomplite')

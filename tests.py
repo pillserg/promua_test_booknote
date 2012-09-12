@@ -165,10 +165,15 @@ class MainTestCase(TestCase):
             assert book
             assert book.authors.count() == 4
 
-            # test author removal from m2m
+            # test author removal from m2m on author delet
             # not logical place for it, but still
             id = book.authors_ids_list[0]
             resp = self.client.post(url_for('delete_author', id=id),)
+            book = Book.query.filter_by(title=booktitle).first()
+            assert id not in book.authors_ids_list
+            new_author_with_same_id = Author(id=id, name='Stranger')
+            db.session.add(new_author_with_same_id)
+            db.session.commit()
             book = Book.query.filter_by(title=booktitle).first()
             assert id not in book.authors_ids_list
 
