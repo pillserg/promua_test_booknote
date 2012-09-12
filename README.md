@@ -23,12 +23,13 @@ populate db with demodata (present in repo in dumpdata.csv file). This command c
 then run testserver:
 
     python run.py
+    
+ps: just tested it on win7 - everything seems to work fine, just change virtualenv activate line
 
 # Development notes
 *   Комментарии на английском - привычка, тяжело избавится.
 *   регистронезависимый like со sqlite и юникодом так и не нашел, так что там страшненький костыль 
 *   try-except - как-то и не нашлось где впихнуть
-*   js-validation
 *   ...
 
 # Possible improvments
@@ -40,6 +41,8 @@ then run testserver:
 *   собрать все менеджмент скрипты в один мейкфайл
 *   пройтись по коду еще на свежую голову )
 *   больше тестов
+*   js-validation
+*   i18n
 *   ...
  
 # improvments beyond test assignment
