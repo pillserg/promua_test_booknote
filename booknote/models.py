@@ -85,22 +85,18 @@ class Author(db.Model):
                             lazy='dynamic')
 
     @staticmethod
-    def get_authors_where_name_contains(q):
-        authors = Author.query.filter(Author.name.like(u'%{}%'.format(q)))
-        return authors
-
-    @staticmethod
     def case_insensetive_get_authors_where_name_contains(q):
         """
-        Trys to cappitalize name
-        It's really dull but i couldnt overcome
-        unicode-casesensetive-insensetive-sqlite issues in apropriate time
-        this method seems to do it's work
+        Implements case insensetive like search on sqlite
+        
+        It's still not ideal, but it's better than previous implementation
+        If app should work with dbs other than sqlite it probably should also 
+        check config 
         """
-        authors = Author.get_authors_where_name_contains(q)
-        if not authors.count():
-            authors = Author.get_authors_where_name_contains(
-                                                    unicode(q).capitalize())
+        authors = Author.query.filter(
+            db.or_(Author.name.like(u'%{}%'.format(q)),
+                   Author.name.like(u'%{}%'.format(unicode(q).capitalize())))
+            )
         return authors
 
     @property
