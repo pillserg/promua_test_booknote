@@ -35,6 +35,9 @@ class Book(db.Model):
 
     @property
     def authors_names(self):
+        """
+        returns textual representation of book authors
+        """
         # simple caching here would be usefull.
         # but simple db column based cache would change db schema
         # and external caching seems like overhead
@@ -53,6 +56,12 @@ class Book(db.Model):
         return [a.autocomplete_dict for a in self.authors.all()]
 
     def add_authors_by_ids(self, new_ids):
+        """
+        adds authors with given ids (if exists) to this book
+        returns number of added authors
+        book object than needs to be added to session and commited
+        """
+
         ids_to_add = set(new_ids) - set(self.authors_ids_list)
         if ids_to_add:
             for author in Author.get_by_id(ids_to_add):
@@ -60,6 +69,12 @@ class Book(db.Model):
         return len(ids_to_add)
 
     def remove_authors_by_ids(self, new_ids):
+        """
+        removes authors with given ids (if exists) from book
+        returns number of removed authors
+        book object than needs to be added to session and commited
+        """
+
         ids_to_remove = set(self.authors_ids_list) - set(new_ids)
         if ids_to_remove:
             for author in Author.get_by_id(ids_to_remove):
@@ -67,6 +82,11 @@ class Book(db.Model):
         return len(ids_to_remove)
 
     def update_authors(self, ids):
+        """
+        updates authors with given ids
+        returns number of added and deleted authors
+        book object than needs to be added to session and commited
+        """
         remove_count = self.remove_authors_by_ids(ids)
         add_count = self.add_authors_by_ids(ids)
         return remove_count + add_count
@@ -88,13 +108,16 @@ class Author(db.Model):
     def case_insensetive_get_authors_where_name_contains(q):
         """
         Implements case insensetive like search on sqlite
-        
+
         It's still not ideal, but it's better than previous implementation
-        If app should work with dbs other than sqlite it probably should also 
-        check config 
+        If app should work with dbs other than sqlite it probably should also
+        check config
+
+        may be there are simple SQlite config solution, but i couldn't
+        find it in apropriate time
         """
         authors = Author.query.filter(
-            db.or_(Author.name.like(u'%{}%'.format(q)),
+            db.or_(Author.name.like(u'%{}%'.format(unicode(q))),
                    Author.name.like(u'%{}%'.format(unicode(q).capitalize())))
             )
         return authors
@@ -106,10 +129,16 @@ class Author(db.Model):
 
     @property
     def autocomplete_dict(self):
+        """
+        returns self dictionary representation apropriate for autocomplite
+        """
         return {'id': self.id, 'name': self.name}
 
     @staticmethod
     def get_by_id(ids):
+        """
+        returns authors with prowided ids
+        """
         list(ids)
         return Author.query.filter(Author.id.in_(ids))
 

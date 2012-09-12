@@ -68,7 +68,7 @@ def after_login(resp):
 def books_list(page, per_page=app.config.get('PER_PAGE')):
     books = Book.query.order_by('-title')
     pagination = books.paginate(page, per_page)
-    return render_template('books_list.html', books=books, pagination=pagination)
+    return render_template('books_list.html', pagination=pagination)
 
 
 @app.route('/authors/')
@@ -79,9 +79,10 @@ def authors_list():
 
 @app.route('/')
 def index():
-    # it's not actualy recently adde
+    # it's not actualy recently added
     # we need some kind of timestamp in db, but it'll do for now
-    books = Book.query.order_by('-id')[:8]
+    NUM_OF_BOOKS_ON_INDEX = 8
+    books = Book.query.order_by('-id')[:NUM_OF_BOOKS_ON_INDEX]
     return render_template('index.html', books=books)
 
 

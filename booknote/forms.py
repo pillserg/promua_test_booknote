@@ -5,9 +5,6 @@ from flask import json
 from booknote.models import Book, Author
 
 
-NEW_ID_STR = 'new'
-
-
 class TagListField(Field):
     widget = TextInput()
 
@@ -22,12 +19,11 @@ class TagListField(Field):
             self.data = [x.strip() for x in valuelist[0].split(',')]
         else:
             self.data = []
-        if NEW_ID_STR in self.data:
-            pass
 
 
 class AuthorsTagListField(TagListField):
     json_data = ''
+
     def process_data(self, authors_q):
         self.data = ''
         if authors_q:
@@ -42,6 +38,9 @@ class LoginForm(Form):
 
 
 class BookForm(Form):
+    """
+    Form for adding editing Book instances
+    """
     title = TextField('title', validators=[Required(), Length(min=5, max=256)])
     authors = AuthorsTagListField('authors')
 
@@ -53,6 +52,11 @@ class BookForm(Form):
         return self.obj
 
     def save(self):
+        """
+        saves changes on book object, or creates new
+        m2m changes are handled in BookBorm.save_m2m
+        returns self.obj
+        """
         if not self.obj:
             self.obj = Book(title=unicode(self.title.data))
         else:
@@ -60,6 +64,11 @@ class BookForm(Form):
         return self.obj
 
     def save_m2m(self):
+        """
+        updates authors of book
+        returns True if there were some actual changes and book object need to
+        be commited
+        """
         if self.authors.data:
             ids = set(self.authors.data)
             return self.obj.update_authors(ids)
@@ -67,6 +76,9 @@ class BookForm(Form):
 
 
 class AuthorForm(Form):
+    """
+    Form for Author addition, editing
+    """
     name = TextField('name', validators=[Required(), Length(min=5, max=256)])
 
     def __init__(self, *args, **kwargs):
