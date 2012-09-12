@@ -97,17 +97,31 @@ class AuthorForm(Form):
 
 
 class SearchForm(Form):
+    """
+    Form for books searching
+    """
     MIN_LENGTH = 3
     message = u"Search query must be at least {} chars long".format(MIN_LENGTH)
     search_input = TextField('search',
                 validators=[Length(min=MIN_LENGTH, max= -1, message=message)])
 
     def find_books(self):
-        q = unicode(self.search_input.data)
+        """
+        searches for books where keyword is present in title or author name
+        """
+        search_query = unicode(self.search_input.data)
+        q = u'%{}%'.format(search_query)
+
+        # used for dummy emulation of caseinsensetive search
+        qC = u'%{}%'.format(capfirst(search_query))
+
         books = Book.query.filter(db.or_(
-                     Book.title.like(u'%{}%'.format(q)),
-                     Book.title.like(u'%{}%'.format(capfirst(q))),)
-                                  )
+                     Book.authors.any(db.or_(
+                         Author.name.like(q),
+                         Author.name.like(qC))),
+                     Book.title.like(q),
+                     Book.title.like(qC)),)
+
         return books
 
 

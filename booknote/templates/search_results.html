@@ -1,7 +1,13 @@
 {% extends "base.html" %}
 {% from '_macros.html' import render_pagination, render_books %}
 
+{% block extra_js %}
+    <script src="{{ url_for('static', filename='js/lib/jquery.highlight-3.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/search.js') }}"></script>
+{% endblock %}
+
 {% block content %}
+    <span class="hidden" id="search_query">{{ search_query }}</span>
     <p class="greet">
         You searched for "{{ search_query }}"
         {% for error in form.search_input.errors %}
@@ -9,6 +15,11 @@
         {% endfor %}
     </p>
     <ul class="entries">
-        {{ render_books(pagination.items, render_controls=g.user.is_authenticated()) }}
+        {% if pagination.items %}
+            {{ render_books(pagination.items, render_controls=g.user.is_authenticated()) }}
+        {% elif search_query %}
+            <div class="center-text">No results</div>
+        {% endif %}
+            
     </ul>
 {% endblock %}

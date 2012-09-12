@@ -49,4 +49,4 @@ input[type="text"].styled-input {
 
 input#search_input {width: 200px;}
 
-
+span.highlight {background-color: yellow;}

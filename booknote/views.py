@@ -193,6 +193,7 @@ def search(page, per_page=app.config.get('PER_PAGE')):
     form = SearchForm(csrf_enabled=False)
     search_query = ''
     books = []
+    pagination = []
     if form.validate_on_submit():
         search_query = form.search_input.data
         books = form.find_books()
