@@ -1,4 +1,23 @@
 {% extends "base.html" %}
+{% from '_macros.html' import render_books %}
 {% block content %}
-    {% include "books_list.html" %}
+    <p class="greet">
+        <i>
+        {% if not g.user.is_authenticated() %}
+            Hi. Welcome to booknote. Simple books management service.
+            Feel free to <a href="{{ url_for('login') }}">login</a> with your google account end edit information.
+        {% else %}
+            Hi {{ g.user.username }}. Welcome to booknote. Simple books management service.
+        {% endif %}
+        </i>       
+    </p>
+    <p class="greet">
+        Recent:
+    </p>
+    <ul class="entries">
+        {{ render_books(books, render_controls=g.user.is_authenticated()) }}
+    </ul>
+    <div class="center-text">
+        <a href="{{ url_for('books_list') }}">More...</a>
+    </div>
 {% endblock %}

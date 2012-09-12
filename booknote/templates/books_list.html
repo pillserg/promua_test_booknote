@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from '_macros.html' import render_pagination %}
+{% from '_macros.html' import render_pagination, render_books %}
 
 {% block extra_css %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='js/lib/jquery-tokeninput/styles/token-input.css') }}" />
@@ -11,28 +11,11 @@
 {% endblock %}
 
 {% block content %}
-<ul class="entries">
-    {% if g.user.is_authenticated() %}
-        <li class="entry"><a href="{{ url_for('add_book') }}" class="">Add book</a></li>
-    {% endif %}    
-    {% for book in pagination.items %}
-        <li class="entry">
-            {% if g.user.is_authenticated() %}
-                <div class="control">
-                    <a href="{{ url_for('edit_book', id=book.id) }}" class="edit_entry_link">edit</a>
-                    <a href="{{ url_for('delete_book', id=book.id) }}" class="delete_entry_link">delete</a>
-                </div>
-            {% endif %}
-            <h2>{{ book.title|wordwrap(18, True) }}</h2>
-            {% with authors = book.authors_names %}
-                {% if authors %}
-                    by {{ book.authors_names|join(', ')|wordwrap(18, True) }}
-                {% else %}
-                    no authors information
-                {% endif %}
-            {% endwith %} 
-        </li>
-    {% endfor %}
-</ul>
+    <ul class="entries">
+        {% if g.user.is_authenticated() %}
+            <li class="entry"><a href="{{ url_for('add_book') }}" class="">Add book</a></li>
+        {% endif %}    
+        {{ render_books(books, render_controls=g.user.is_authenticated()) }}
+    </ul>
     {{ render_pagination(pagination) }}
 {% endblock %}

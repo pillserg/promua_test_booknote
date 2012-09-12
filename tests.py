@@ -105,11 +105,13 @@ class MainTestCase(TestCase):
     def tests_main_views_responses(self):
         """ sanity check """
         with self.app.test_request_context():
+            self.assert200(self.client.get(url_for('index')))
             self.assert200(self.client.get(url_for('books_list')))
             self.assertRedirects(self.client.get(url_for('add_book')),
                                  # not very generic
                                  url_for('login') + '?next=%2Fbooks%2Fadd%2F')
             self.assert200(self.client.get(url_for('authors_list')))
+            #self.assert200(self.client.get(url_for('search')))
 
     def test_book(self):
         with self.app.test_request_context():

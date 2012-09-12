@@ -79,7 +79,10 @@ def authors_list():
 
 @app.route('/')
 def index():
-    return books_list(page=1)
+    # it's not actualy recently adde
+    # we need some kind of timestamp in db, but it'll do for now
+    books = Book.query.order_by('-id')[:8]
+    return render_template('index.html', books=books)
 
 
 def add_or_edit_book(form, msg=None, template_name='process_book.html'):

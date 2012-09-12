@@ -19,6 +19,9 @@ a:hover         {color: red;}
                   margin-bottom: 1em; background: #fafafa; }
 span.nav        { float: left;}
 div.searchbox   { float: right; margin-top: 6px; }
+p.greet         {margin-left: 1.2em;}
+
+
 .flash          { background: #CEE5F5; padding: 0.5em;
                   border: 1px solid #AACBE2; }
 .error          { background: #F0D6D6; padding: 0.5em; }
@@ -29,6 +32,9 @@ div.control     {float: right; margin-top: 6px;}
 
 
 .hidden         {display: none;}
+
+.center-text    {text-align: center;}
+
 
 
 input[type="text"].styled-input {
