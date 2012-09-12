@@ -20,7 +20,7 @@
                 <h2>{{ author.name }}</h2>
                 {% with books_count = author.books_count %}
                     {% if books_count %}
-                        {{ books_count }} book(s) of this author currently in database
+                        {{ books_count }} book(s)
                     {% else %}
                         <br>
                     {% endif %}
