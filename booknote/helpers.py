@@ -1,6 +1,13 @@
-from flask import request, current_app, json, url_for
-from booknote import app
+from itertools import chain
+import os
 
+from flask import request, current_app, json, url_for
+from booknote import app, db
+from config import basedir
+
+
+DELIMITER = '|||'
+FILENAME = 'dumpdata.csv'
 
 def to_json(obj):
     """
@@ -29,3 +36,50 @@ def capfirst(s):
         return s.upper()
     else:
         return ''.join((s[0].upper(), s[1:]))
+
+
+# this to functions are really simple and silly, but they work as expected )
+def export_books(books=None, path=None):
+    if not books:
+        from booknote.models import Book
+        books = Book.query.all()
+
+    lst = []
+    for book in books:
+        lst.append(DELIMITER.join(chain([book.title, ],
+                                        [a.name for a in book.authors.all()])))
+    data = '\n'.join(lst)
+
+    if not path:
+        path = os.path.join(basedir, FILENAME)
+    with open(path, 'w') as f:
+        f.write(data)
+
+
+# better use only on newly created db
+# dublicated names are overrided
+def import_books(path=None):
+    from booknote.models import Book, Author
+    if not path:
+        path = os.path.join(basedir, FILENAME)
+    with open(path, 'r') as f:
+        raw_data = [unicode(line) for line in f.readlines()]
+    for line in raw_data:
+        line = line.split(DELIMITER)
+        title = line[0]
+        authors = line[1:]
+        book = Book.query.filter_by(title=title).first()
+        if not book:
+            book = Book(title=title)
+            db.session.add(book)
+        if authors:
+            db.session.commit()
+            for author_name in authors:
+                author = Author.query.filter_by(name=author_name).first()
+                if not author:
+                    author = Author(name=author_name)
+                book.authors.append(author)
+            db.session.add(book)
+            db.session.commit()
+    db.session.commit()
+
