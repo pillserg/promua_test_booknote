@@ -24,9 +24,9 @@
  + add pagination to lists
  + change index to show lates books and greetings
  + Search
- - initialization/managment script (makefile will do nice)
+ + initialization/managment script (makefile will do nice)
  - review
- - doc file for github
+ + doc file for github
  ...
 
 order is not presize

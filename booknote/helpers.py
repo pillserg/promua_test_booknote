@@ -9,6 +9,7 @@ from config import basedir
 DELIMITER = '|||'
 FILENAME = 'dumpdata.csv'
 
+
 def to_json(obj):
     """
     flask.jsonify converts everything to dict
@@ -38,8 +39,10 @@ def capfirst(s):
         return ''.join((s[0].upper(), s[1:]))
 
 
-# this to functions are really simple and silly, but they work as expected )
 def export_books(books=None, path=None):
+    """
+    this to functions are really simple and silly, but they work as expected )
+    """
     if not books:
         from booknote.models import Book
         books = Book.query.all()
@@ -56,9 +59,12 @@ def export_books(books=None, path=None):
         f.write(data)
 
 
-# better use only on newly created db
-# dublicated names are overrided
 def import_books(path=None):
+    """
+    imports data from file
+    better use only on newly created db
+    dublicated names are overrided
+    """
     from booknote.models import Book, Author
     if not path:
         path = os.path.join(basedir, FILENAME)
@@ -82,4 +88,3 @@ def import_books(path=None):
             db.session.add(book)
             db.session.commit()
     db.session.commit()
-

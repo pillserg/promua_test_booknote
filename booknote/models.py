@@ -109,7 +109,8 @@ class Author(db.Model):
     @staticmethod
     def case_insensetive_get_authors_where_name_contains(q):
         """
-        Implements case insensetive like search on sqlite
+        Implements case insensetive (ok, not case insensetive, 
+        but results are near normal) unicode like search on sqlite
 
         It's still not ideal, but it's better than previous implementation
         If app should work with dbs other than sqlite it probably should also

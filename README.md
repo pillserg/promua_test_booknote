@@ -16,9 +16,15 @@ run tests:
 
     python tests.py
 
-populate db with demodata:
+populate db with demodata (present in repo in dumpdata.csv file). This command can take some time (if you don't have SSD):
 
     python db_populate.py
+    
+then run testserver:
+
+    python run.py
+
+    
     
 # Development notes
 ...

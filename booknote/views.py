@@ -26,6 +26,12 @@ def before_request():
 @app.route('/login', methods=['GET', 'POST', ])
 @oid.loginhandler
 def login():
+    """
+    trys to login user via openID.
+    Google by defaul, but other providers can be added in config file.
+    After succesfull response after_login is called where user is logged
+    in via flaks-login.
+    """
     if g.user and g.user.is_authenticated():
         return redirect(url_for('index'))
     form = LoginForm()
@@ -46,6 +52,9 @@ def logout():
 
 @oid.after_login
 def after_login(resp):
+    """
+    review flask-openid docs if something is not clear here
+    """
     if not resp.email:
         flash('Invalid login. Please try again.')
         redirect(url_for('login'))
@@ -66,16 +75,14 @@ def after_login(resp):
 @app.route('/books/', defaults={'page': 1})
 @app.route('/books/page/<int:page>')
 def books_list(page, per_page=app.config.get('PER_PAGE')):
-    books = Book.query.order_by('-title')
-    pagination = books.paginate(page, per_page)
+    pagination = Book.query.order_by('-title').paginate(page, per_page)
     return render_template('books_list.html', pagination=pagination)
 
 
 @app.route('/authors/', defaults={'page': 1})
 @app.route('/authors/page/<int:page>')
 def authors_list(page, per_page=app.config.get('PER_PAGE')):
-    authors = Author.query.order_by('-name')
-    pagination = authors.paginate(page, per_page)
+    pagination = Author.query.order_by('-name').paginate(page, per_page)
     return render_template('authors_list.html', pagination=pagination)
 
 
@@ -105,15 +112,14 @@ def add_or_edit_book(form, msg=None, template_name='process_book.html'):
 @login_required
 def add_book():
     form = BookForm()
-    msg = 'Book was successfully added'
+    msg = u'Book was successfully added'
     return add_or_edit_book(form, msg)
 
 
 @app.route('/books/delete/<int:id>', methods=['POST', ])
 @login_required
 def delete_book(id):
-    book = Book.query.get_or_404(id)
-    db.session.delete(book)
+    db.session.delete(Book.query.get_or_404(id))
     db.session.commit()
     return jsonify(dict(success=True))
 
@@ -121,9 +127,8 @@ def delete_book(id):
 @app.route('/books/edit/<int:id>', methods=['GET', 'POST', ])
 @login_required
 def edit_book(id):
-    book = Book.query.get_or_404(id)
     msg = 'Book information was successfully updated'
-    form = BookForm(obj=book)
+    form = BookForm(obj=Book.query.get_or_404(id))
     return add_or_edit_book(form, msg)
 
 
@@ -141,24 +146,22 @@ def add_or_edit_author(form, msg=None, template_name='process_author.html'):
 @login_required
 def add_author():
     form = AuthorForm()
-    msg = 'Author was successfully added'
+    msg = u'Author was successfully added'
     return add_or_edit_author(form, msg)
 
 
 @app.route('/authors/edit/<int:id>', methods=['GET', 'POST', ])
 @login_required
 def edit_author(id):
-    author = Author.query.get_or_404(id)
-    form = AuthorForm(obj=author)
-    msg = 'Author information was successfully updated'
+    form = AuthorForm(obj=Author.query.get_or_404(id))
+    msg = u'Author information was successfully updated'
     return add_or_edit_author(form, msg)
 
 
 @app.route('/authors/delete/<int:id>', methods=['POST', ])
 @login_required
 def delete_author(id):
-    author = Author.query.get_or_404(id)
-    db.session.delete(author)
+    db.session.delete(Author.query.get_or_404(id))
     db.session.commit()
     return jsonify(dict(success=True))
 
@@ -198,8 +201,8 @@ def search(page, per_page=app.config.get('PER_PAGE')):
     actual search query is implemented in forms.SearchForm
     some external solution like whoosh would be an overhead in this case
     simple search looks for like %query_string% nothing more
-    
-    2.    Поиск книг по названию либо автору (c) 
+
+    2.    Поиск книг по названию либо автору (c)
     """
     form = SearchForm(csrf_enabled=False)
     search_query = ''
