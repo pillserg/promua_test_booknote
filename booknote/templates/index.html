@@ -12,12 +12,16 @@
         </i>       
     </p>
     <p class="greet">
-        Recent:
+        {% if not books %}
+            No books in database, <a href="{{ url_for('add_book') }}">add one?</a>
+        {% endif %}
     </p>
     <ul class="entries">
         {{ render_books(books, render_controls=g.user.is_authenticated()) }}
     </ul>
-    <div class="center-text">
-        <a href="{{ url_for('books_list') }}">More...</a>
-    </div>
+    {% if books %}
+        <div class="center-text">
+            <a href="{{ url_for('books_list') }}">More...</a>
+        </div>
+    {% endif %}
 {% endblock %}
