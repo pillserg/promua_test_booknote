@@ -165,6 +165,13 @@ class MainTestCase(TestCase):
             assert book
             assert book.authors.count() == 4
 
+            # test author removal from m2m
+            # not logical place for it, but still
+            id = book.authors_ids_list[0]
+            resp = self.client.post(url_for('delete_author', id=id),)
+            book = Book.query.filter_by(title=booktitle).first()
+            assert id not in book.authors_ids_list
+
 
     def test_author(self):
         with self.app.test_request_context():
