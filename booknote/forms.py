@@ -43,7 +43,7 @@ class BookForm(Form):
     """
     Form for adding editing Book instances
     """
-    title = TextField('title', validators=[Required(), Length(min=5, max=256)])
+    title = TextField('title', validators=[Required(), Length(min=1, max=256)])
     authors = AuthorsTagListField('authors')
 
     def __init__(self, *args, **kwargs):

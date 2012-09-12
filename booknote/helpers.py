@@ -63,7 +63,7 @@ def import_books(path=None):
     if not path:
         path = os.path.join(basedir, FILENAME)
     with open(path, 'r') as f:
-        raw_data = [unicode(line) for line in f.readlines()]
+        raw_data = [line.decode('utf-8') for line in f.readlines()]
     for line in raw_data:
         line = line.split(DELIMITER)
         title = line[0]

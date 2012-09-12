@@ -197,6 +197,9 @@ def search(page, per_page=app.config.get('PER_PAGE')):
     search view
     actual search query is implemented in forms.SearchForm
     some external solution like whoosh would be an overhead in this case
+    simple search looks for like %query_string% nothing more
+    
+    2.    Поиск книг по названию либо автору (c) 
     """
     form = SearchForm(csrf_enabled=False)
     search_query = ''
