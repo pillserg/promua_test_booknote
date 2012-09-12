@@ -145,6 +145,7 @@ class MainTestCase(TestCase):
                                               authors=authors_ids_str))
             book = Book.query.filter_by(title=booktitle).first()
             assert book
+            assert book.id == new_book.id
             assert book.authors.count() == 4
 
             # remove some authors
@@ -198,6 +199,13 @@ class MainTestCase(TestCase):
             resp = self.client.post(url_for('add_author'), data=dict(name=name))
             new_author = Author.query.filter_by(name=name).first()
             assert new_author
+
+            name = name + u'_upd'
+            resp = self.client.post(url_for('edit_author'), data=dict(name=name))
+            author = Author.query.filter_by(name=name).first()
+            assert author
+            assert author.id == new_author.id
+
 
     def test_autocomplite(self):
         with self.app.test_request_context():

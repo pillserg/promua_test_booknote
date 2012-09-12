@@ -69,6 +69,14 @@ class BookForm(Form):
 class AuthorForm(Form):
     name = TextField('name', validators=[Required(), Length(min=5, max=256)])
 
+    def __init__(self, *args, **kwargs):
+        self.obj = kwargs.get('obj', None)
+        super(AuthorForm, self).__init__(*args, **kwargs)
+
     def save(self):
-        author = Author(name=unicode(self.name.data))
+        if not self.obj:
+            author = Author(name=unicode(self.name.data))
+        else:
+            self.populate_obj(self.obj)
+            author = self.obj
         return author

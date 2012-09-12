@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Add new author</h2>
+{% if 'add' in request.path %}
+    <h2>Add new author</h2>
+{% else %}
+    <h2>Edit author info</h2>
+{% endif %}
 <form action="" method="post" name="edit">
     {{form.hidden_tag()}}
     <table>
@@ -15,7 +19,7 @@
         </tr>
         <tr>
             <td></td>
-            <td><input type="submit" value="Add author"></td>
+            <td><input type="submit" value="{% if 'add' in request.path %}Add author{% else %}Edit{% endif %}"></td>
         </tr>
     </table>
 </form>
