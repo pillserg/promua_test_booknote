@@ -7,6 +7,9 @@ from booknote.models import Book, Author
 from booknote.helpers import capfirst
 
 
+__all__ = ['LoginForm', 'BookForm', 'AuthorForm', 'SearchForm']
+
+
 class TagListField(Field):
     widget = TextInput()
 
