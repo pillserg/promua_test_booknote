@@ -201,7 +201,8 @@ class MainTestCase(TestCase):
             assert new_author
 
             name = name + u'_upd'
-            resp = self.client.post(url_for('edit_author'), data=dict(name=name))
+            resp = self.client.post(url_for('edit_author', id=new_author.id),
+                                    data=dict(name=name))
             author = Author.query.filter_by(name=name).first()
             assert author
             assert author.id == new_author.id

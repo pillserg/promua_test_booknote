@@ -15,12 +15,14 @@
  + delete
  + WTF forms for editing data
     + books
-    - author (no edit still :))
+    + author edit and tests done
  + m2m addition from books add edit through http://loopj.com/jquery-tokeninput/ should be ok.
  + make pretty and more UF
     + some styling 
     + upgrade crud in UI to AJAX(Deletion is ajax, additiion and editing does not need it i think)
     
+ - add pagination to lists
+ - change index to show lates books and greetings
  - Search
  - initialization/managment script (makefile will do nice)
  - review
