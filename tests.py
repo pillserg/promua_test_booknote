@@ -206,5 +206,7 @@ class MainTestCase(TestCase):
                                    query_string={'q': u'барна'})
             assert len(json.loads(resp.data)) == 2
             assert capital_res == resp.data
+
+
 if __name__ == '__main__':
     unittest.main()

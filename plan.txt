@@ -13,12 +13,15 @@
  + login/logout support for users flask-login (through openID (I think restricted to Google account))
  + simple data add (WTF)
  + delete
- - WTF forms for editing data
+ + WTF forms for editing data
+    + books
+    - author (no edit still :))
+ + m2m addition from books add edit through http://loopj.com/jquery-tokeninput/ should be ok.
+ + make pretty and more UF
+    + some styling 
+    + upgrade crud in UI to AJAX(Deletion is ajax, additiion and editing does not need it i think)
+    
  - Search
- - m2m addition from books add edit through http://loopj.com/jquery-tokeninput/ should be ok.
- - make pretty and more UF
-    - some styling 
-    - upgrade crud in UI to AJAX
  - initialization/managment script (makefile will do nice)
  ...
 
