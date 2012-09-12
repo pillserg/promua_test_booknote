@@ -42,7 +42,10 @@
         </tr>
         <tr>
             <td><span class="hidden json_autocomplite_init_data">{{ form.authors.json_data }}</span></td>
-            <td><input type="submit" value="{% if 'add' in request.path %}Add Book{% else %}Edit book{% endif %}"></td>
+            <td>
+                <a href="{{ url_for('add_author', next=request.path) }}" class='right'>+ author</a>
+                <input type="submit" value="{% if 'add' in request.path %}Add Book{% else %}Edit book{% endif %}">
+            </td>
         </tr>
     </table>
 </form>

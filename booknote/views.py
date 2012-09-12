@@ -125,7 +125,7 @@ def add_or_edit_author(form, msg=None, template_name='process_author.html'):
         db.session.commit()
         if msg:
             flash(msg)
-        return redirect(url_for('authors_list'))
+        return redirect(request.args.get('next') or url_for('authors_list'))
     return render_template(template_name, form=form)
 
 
