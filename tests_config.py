@@ -9,6 +9,7 @@ SQLITE_DATABASE_NAME = 'booknote.db'
 
 TESTING = True
 CSRF_ENABLED = False
+SECRET_KEY = 'very unique test sectret key 12345'
 
 SQLALCHEMY_DATABASE_URI = "sqlite://"
 
@@ -20,4 +21,4 @@ OPENID_PROVIDERS = [{
 
 MIN_AUTOCOMPLITE_LENGTH = 1
 
-SECRET_KEY = 'very unique test sectret key 12345'
+PER_PAGE = 12

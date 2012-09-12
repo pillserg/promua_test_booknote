@@ -63,10 +63,12 @@ def after_login(resp):
     return redirect(request.args.get('next') or url_for('index'))
 
 
-@app.route('/books/')
-def books_list():
-    books = Book.query.order_by('-id').all()
-    return render_template('books_list.html', books=books)
+@app.route('/books/', defaults={'page': 1})
+@app.route('/books/page/<int:page>')
+def books_list(page, per_page=app.config.get('PER_PAGE')):
+    books = Book.query.order_by('-title')
+    pagination = books.paginate(page, per_page)
+    return render_template('books_list.html', books=books, pagination=pagination)
 
 
 @app.route('/authors/')
@@ -77,7 +79,7 @@ def authors_list():
 
 @app.route('/')
 def index():
-    return books_list()
+    return books_list(page=1)
 
 
 def add_or_edit_book(form, msg=None, template_name='process_book.html'):

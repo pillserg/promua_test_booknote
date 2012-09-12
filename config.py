@@ -21,3 +21,5 @@ OPENID_PROVIDERS = [{
                      }, ]
 
 MIN_AUTOCOMPLITE_LENGTH = 1
+
+PER_PAGE = 12
