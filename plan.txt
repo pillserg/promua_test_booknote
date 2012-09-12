@@ -23,6 +23,8 @@
     
  - Search
  - initialization/managment script (makefile will do nice)
+ - review
+ - doc file for github
  ...
 
 order is not presize
