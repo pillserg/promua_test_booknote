@@ -15,5 +15,5 @@ decorator==3.3.3
 python-openid==2.2.5
 simplejson==2.6.1
 sqlalchemy-migrate==0.7.2
-twill==0.9
+twill==0.9.1
 wsgiref==0.1.2
